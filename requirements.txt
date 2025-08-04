@@ -1,16 +1,17 @@
-# Requirements for WhatsApp Chatbot
-# Optimized for Vercel deployment
+# Ultra-lightweight requirements for Vercel deployment
+# Only essential dependencies to avoid size limits
 
 fastapi>=0.104.0,<0.105.0
 uvicorn[standard]>=0.24.0,<0.25.0
 python-multipart>=0.0.6,<0.1.0
 pydantic>=2.5.0,<3.0.0
-chromadb>=0.4.18,<0.5.0
-sentence-transformers>=2.2.2,<3.0.0
-langchain>=0.1.0,<0.2.0
-langchain-groq>=0.0.1,<0.1.0
-langchain-community>=0.0.10,<0.1.0
 python-dotenv>=1.0.0,<2.0.0
-numpy>=1.24.0,<2.0.0
-pandas>=2.1.0,<3.0.0
-python-dateutil>=2.8.0,<3.0.0
+
+# Removed heavy dependencies:
+# - transformers (too large)
+# - torch (too large)
+# - numpy (not essential for basic API)
+# - chromadb (too large)
+# - sentence-transformers (too large)
+# - langchain (too large)
+# - pandas (not essential)
