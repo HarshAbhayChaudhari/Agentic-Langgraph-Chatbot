@@ -1,0 +1,20 @@
+[31/12/2023, 14:30:25] John Doe: Happy New Year! How are you doing?
+[31/12/2023, 14:31:00] You: Thanks! Same to you! I'm doing great, just working on some projects.
+[31/12/2023, 14:32:15] John Doe: That sounds interesting! What kind of projects?
+[31/12/2023, 14:33:45] You: I'm building a WhatsApp chatbot that can answer questions about chat history using AI.
+[31/12/2023, 14:35:20] John Doe: Wow, that's really cool! How does it work?
+[31/12/2023, 14:36:10] You: It uses vector embeddings to search through messages and then uses an LLM to generate answers.
+[31/12/2023, 14:37:30] John Doe: That's fascinating! When will it be ready?
+[31/12/2023, 14:38:45] You: Hopefully by next week. I'm working on the backend API right now.
+[31/12/2023, 14:40:00] John Doe: Keep me updated! I'd love to try it out.
+[31/12/2023, 14:41:15] You: Definitely! I'll send you a link once it's deployed.
+[01/01/2024, 10:15:30] You: Good morning! Happy New Year again!
+[01/01/2024, 10:16:45] John Doe: Good morning! Happy New Year to you too!
+[01/01/2024, 10:18:20] You: How was your New Year celebration?
+[01/01/2024, 10:20:10] John Doe: It was great! We had a small party with friends. How about you?
+[01/01/2024, 10:22:00] You: Nice! I spent it coding and working on the chatbot project.
+[01/01/2024, 10:23:30] John Doe: You're really dedicated! Any progress on the project?
+[01/01/2024, 10:25:15] You: Yes! I finished the backend API and now I'm working on the frontend.
+[01/01/2024, 10:27:00] John Doe: That's awesome! Can't wait to see it in action.
+[01/01/2024, 10:28:45] You: Thanks! I'll definitely share it with you once it's ready.
+[01/01/2024, 10:30:20] John Doe: Looking forward to it! Good luck with the development! 

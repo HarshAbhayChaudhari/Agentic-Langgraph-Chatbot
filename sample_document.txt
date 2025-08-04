@@ -1,0 +1,54 @@
+Project Documentation: WhatsApp Chat Query System
+
+Introduction
+This document describes the implementation of a WhatsApp chat query system that uses vector embeddings and LLM to answer questions about chat history.
+
+Technical Architecture
+The system consists of several key components:
+
+1. File Parser Service
+- Supports multiple file formats: TXT, PDF, DOCX
+- Extracts text content from various document types
+- Handles WhatsApp chat exports and general documents
+
+2. Embedding Service
+- Uses Sentence Transformers for vector embeddings
+- Generates embeddings for text chunks
+- Supports similarity search
+
+3. Vector Database (ChromaDB)
+- Stores document embeddings and metadata
+- Enables fast similarity search
+- Supports multiple collections
+
+4. LLM Service
+- Uses Groq API for natural language processing
+- Generates contextual answers
+- Handles query processing
+
+API Endpoints
+The system provides the following API endpoints:
+
+- POST /api/v1/upload - Upload and process files
+- POST /api/v1/query - Query documents using natural language
+- GET /api/v1/status/{collection} - Check processing status
+- GET /api/v1/collections - List all collections
+
+File Format Support
+The system now supports:
+- TXT files (WhatsApp exports and plain text)
+- PDF files (text extraction from pages)
+- DOCX files (paragraphs and tables)
+
+Deployment
+The application can be deployed using:
+- Docker containers
+- Vercel serverless functions
+- Traditional hosting platforms
+
+Future Enhancements
+Planned improvements include:
+- Support for more file formats
+- Advanced search capabilities
+- User authentication
+- Real-time processing 

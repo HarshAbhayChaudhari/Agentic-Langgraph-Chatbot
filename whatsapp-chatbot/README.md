@@ -1,38 +1,21 @@
 # WhatsApp Chat Query API
 
-A FastAPI backend application that allows you to upload various document formats, create vector embeddings, and query your content using natural language.
+A FastAPI backend application that allows you to upload WhatsApp chat exports, create vector embeddings, and query your messages using natural language.
 
 ## Features
 
-- 📁 **Multi-Format Upload**: Upload TXT, PDF, and DOCX files
+- 📁 **File Upload**: Upload WhatsApp chat export files (.txt format)
 - 🔍 **Vector Search**: Create embeddings and store them in ChromaDB
 - 🤖 **LLM Integration**: Use Groq API for natural language querying
 - 🔄 **Background Processing**: Process files asynchronously
-- 📊 **Collection Management**: Manage multiple document collections
+- 📊 **Collection Management**: Manage multiple chat collections
 - 🏥 **Health Checks**: API health monitoring
-
-## Supported File Formats
-
-### 📄 **TXT Files**
-- WhatsApp chat exports (automatic parsing)
-- Plain text documents
-- General text files
-
-### 📋 **PDF Files**
-- Text extraction from all pages
-- Paragraph-based chunking
-- Page number tracking
-
-### 📝 **DOCX Files**
-- Paragraph extraction
-- Table content extraction
-- Structured document processing
 
 ## Prerequisites
 
 - Python 3.8+
 - Groq API key
-- Document files (TXT, PDF, DOCX)
+- WhatsApp chat export file (.txt format)
 
 ## Installation
 
@@ -50,7 +33,7 @@ A FastAPI backend application that allows you to upload various document formats
 
 3. **Install dependencies**
    ```bash
-   uv pip install -r requirements.txt
+   pip install -r requirements.txt
    ```
 
 4. **Set up environment variables**
@@ -81,23 +64,23 @@ The API will be available at `http://localhost:8000`
 GET /health
 ```
 
-#### Upload Document File
+#### Upload Chat File
 ```bash
 POST /api/v1/upload
 Content-Type: multipart/form-data
 
-file: <your-document.pdf|docx|txt>
-collection_name: "my_documents" (optional)
+file: <your-chat-file.txt>
+collection_name: "my_chat" (optional)
 ```
 
-#### Query Documents
+#### Query Messages
 ```bash
 POST /api/v1/query
 Content-Type: application/json
 
 {
-  "query": "What does the document say about the project?",
-  "collection_name": "my_documents",
+  "query": "What did I say about the meeting?",
+  "collection_name": "my_chat",
   "top_k": 5
 }
 ```
@@ -117,23 +100,18 @@ GET /api/v1/collections
 DELETE /api/v1/collections/{collection_name}
 ```
 
-### File Format Examples
+### WhatsApp Chat Export Format
 
-#### WhatsApp Chat Export (TXT)
+The application expects WhatsApp chat exports in the following format:
 ```
-[31/12/2023, 14:30:25] John Doe: Happy New Year! How are you doing?
-[31/12/2023, 14:31:00] You: Thanks! Same to you! I'm doing great...
+[DD/MM/YYYY, HH:MM:SS] Sender: Message
 ```
 
-#### PDF Document
-- Upload any PDF file
-- System extracts text from all pages
-- Creates chunks for better search
-
-#### DOCX Document
-- Upload Word documents
-- Extracts paragraphs and tables
-- Maintains document structure
+Example:
+```
+[31/12/2023, 14:30:25] John Doe: Happy New Year!
+[31/12/2023, 14:31:00] You: Thanks! Same to you!
+```
 
 ## API Documentation
 
@@ -198,10 +176,6 @@ whatsapp-chatbot/
 │   ├── models/              # Pydantic models
 │   ├── routes/              # API routes
 │   ├── services/            # Business logic
-│   │   ├── file_parser.py   # Multi-format file parser
-│   │   ├── embedding_service.py
-│   │   ├── chroma_service.py
-│   │   └── llm_service.py
 │   └── utils/               # Utility functions
 ├── data/                    # ChromaDB data storage
 ├── main.py                  # Application entry point
@@ -224,49 +198,21 @@ whatsapp-chatbot/
 
 The application uses ChromaDB for vector storage. Data is persisted in the `./data/chroma_db` directory by default.
 
-## File Processing Details
-
-### TXT Files
-- **WhatsApp Format**: Automatic detection and parsing
-- **Plain Text**: Paragraph-based chunking
-- **Encoding**: UTF-8 support
-
-### PDF Files
-- **Text Extraction**: Uses pdfplumber and PyPDF2
-- **Page Tracking**: Maintains page numbers
-- **Formatting**: Preserves paragraph structure
-
-### DOCX Files
-- **Paragraph Extraction**: All document paragraphs
-- **Table Support**: Extracts table content
-- **Structure**: Maintains document hierarchy
-
 ## Troubleshooting
 
 ### Common Issues
 
-1. **File Upload Error**
-   - Ensure file is in supported format (TXT, PDF, DOCX)
-   - Check file size limits
-   - Verify file is not corrupted
-
-2. **PDF Parsing Issues**
-   - Install PyPDF2 and pdfplumber
-   - Check if PDF contains extractable text
-   - Some scanned PDFs may not work
-
-3. **DOCX Parsing Issues**
-   - Install python-docx
-   - Ensure file is not password protected
-   - Check file format compatibility
-
-4. **ChromaDB Connection Error**
+1. **ChromaDB Connection Error**
    - Ensure the data directory exists
    - Check file permissions
 
-5. **LLM Initialization Error**
+2. **LLM Initialization Error**
    - Verify your Groq API key is set correctly
    - Check internet connectivity
+
+3. **File Upload Error**
+   - Ensure the file is in .txt format
+   - Check file size limits
 
 ### Logs
 
@@ -282,4 +228,4 @@ The application logs to stdout. Check the console output for detailed error mess
 
 ## License
 
-This project is licensed under the MIT License. 
+This project is licensed under the MIT License.
