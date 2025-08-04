@@ -1,0 +1,16 @@
+{
+  "name": "whatsapp-chatbot-api",
+  "version": "1.0.0",
+  "description": "WhatsApp Chat Query API using FastAPI and Vercel",
+  "main": "api/index.py",
+  "scripts": {
+    "dev": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "start": "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
+  },
+  "keywords": ["fastapi", "vercel", "whatsapp", "chatbot", "api"],
+  "author": "Your Name",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
