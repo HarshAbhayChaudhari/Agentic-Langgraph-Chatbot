@@ -5,7 +5,7 @@ import numpy as np
 class EmbeddingService:
     def __init__(self, model_name: str = "all-MiniLM-L6-v2"):
         """
-        Initialize embedding service
+        Initialize embedding service.
         
         Args:
             model_name: Name of the sentence transformer model to use
