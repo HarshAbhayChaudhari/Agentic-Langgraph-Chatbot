@@ -1,171 +1,118 @@
 # WhatsApp Chat Query API
 
-A FastAPI backend application that allows you to upload WhatsApp chat exports, create vector embeddings, and query your messages using natural language.
+A FastAPI-based application that allows you to upload WhatsApp chat exports and query them using natural language. The application uses vector search with ChromaDB and Groq LLM for intelligent responses.
 
 ## Features
 
-- 📁 **File Upload**: Upload WhatsApp chat export files (.txt format)
-- 🔍 **Vector Search**: Create embeddings and store them in ChromaDB
-- 🤖 **LLM Integration**: Use Groq API for natural language querying
-- 🔄 **Background Processing**: Process files asynchronously
-- 📊 **Collection Management**: Manage multiple chat collections
-- 🏥 **Health Checks**: API health monitoring
+- Upload WhatsApp chat exports (.txt files)
+- Vector-based search using ChromaDB
+- Natural language querying using Groq LLM
+- RESTful API endpoints
+- CORS support for frontend integration
 
-## Prerequisites
+## Local Development
 
-- Python 3.8+
+### Prerequisites
+
+- Python 3.9+
 - Groq API key
-- WhatsApp chat export file (.txt format)
 
-## Installation
+### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone <your-repo-url>
-   cd whatsapp-chatbot
-   ```
+1. Clone the repository:
+```bash
+git clone <your-repo-url>
+cd whatsapp-chatbot
+```
 
-2. **Create virtual environment**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
-   ```
+2. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+3. Set up environment variables:
+```bash
+cp env.example .env
+```
 
-4. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   # Edit .env file with your API keys
-   ```
+Edit `.env` and add your Groq API key:
+```
+GROQ_API_KEY=your_groq_api_key_here
+```
 
-5. **Create data directory**
-   ```bash
-   mkdir -p data/chroma_db
-   ```
-
-## Usage
-
-### Starting the Server
-
+4. Run the application:
 ```bash
 python main.py
 ```
 
 The API will be available at `http://localhost:8000`
 
-### API Endpoints
+## Vercel Deployment
 
-#### Health Check
-```bash
-GET /health
-```
+### Prerequisites
 
-#### Upload Chat File
-```bash
-POST /api/v1/upload
-Content-Type: multipart/form-data
+- Vercel account
+- Groq API key
+- GitHub repository with your code
 
-file: <your-chat-file.txt>
-collection_name: "my_chat" (optional)
-```
+### Deployment Steps
 
-#### Query Messages
-```bash
-POST /api/v1/query
-Content-Type: application/json
+1. **Push your code to GitHub**
 
-{
-  "query": "What did I say about the meeting?",
-  "collection_name": "my_chat",
-  "top_k": 5
-}
-```
+2. **Connect to Vercel:**
+   - Go to [vercel.com](https://vercel.com)
+   - Sign in with your GitHub account
+   - Click "New Project"
+   - Import your GitHub repository
 
-#### Get Processing Status
-```bash
-GET /api/v1/status/{collection_name}
-```
+3. **Configure Environment Variables:**
+   - In your Vercel project dashboard, go to "Settings" → "Environment Variables"
+   - Add the following variables:
+     - `GROQ_API_KEY`: Your Groq API key
+     - `TAVILY_API_KEY`: (Optional) Your Tavily API key for web search
 
-#### List Collections
-```bash
-GET /api/v1/collections
-```
+4. **Deploy:**
+   - Vercel will automatically detect the Python project
+   - The `vercel.json` configuration will handle the routing
+   - Click "Deploy" to start the deployment process
 
-#### Delete Collection
-```bash
-DELETE /api/v1/collections/{collection_name}
-```
+### Important Notes for Vercel Deployment
 
-### WhatsApp Chat Export Format
+- **ChromaDB**: The application automatically switches to in-memory storage when deployed on Vercel (serverless environment)
+- **Data Persistence**: Data will not persist between function invocations on Vercel. For production use, consider using a cloud database
+- **Cold Starts**: The first request may take longer due to serverless cold starts
+- **Memory Limits**: Vercel has memory limits, so large chat files may need to be processed in chunks
 
-The application expects WhatsApp chat exports in the following format:
-```
-[DD/MM/YYYY, HH:MM:SS] Sender: Message
-```
+### Alternative Deployment Options
 
-Example:
-```
-[31/12/2023, 14:30:25] John Doe: Happy New Year!
-[31/12/2023, 14:31:00] You: Thanks! Same to you!
-```
+For production use with data persistence, consider:
+- **Railway**: Supports persistent storage
+- **Render**: Offers persistent disk storage
+- **DigitalOcean App Platform**: Good for Python applications
+- **AWS/GCP/Azure**: For more control and scalability
 
-## API Documentation
+## API Endpoints
 
-Once the server is running, visit:
-- **Swagger UI**: `http://localhost:8000/docs`
-- **ReDoc**: `http://localhost:8000/redoc`
+### Health Check
+- `GET /health` - Check if the API is running
 
-## Deployment
+### Upload
+- `POST /api/v1/upload` - Upload WhatsApp chat file
+  - Body: Form data with file field
 
-### Local Development
-```bash
-python main.py
-```
+### Chat
+- `POST /api/v1/chat` - Query the chat
+  - Body: JSON with `query` field
 
-### Production with Docker
-```dockerfile
-# Dockerfile
-FROM python:3.11-slim
+## Environment Variables
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-EXPOSE 8000
-
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-### Vercel Deployment
-
-1. Create a `vercel.json` file:
-```json
-{
-  "version": 2,
-  "builds": [
-    {
-      "src": "main.py",
-      "use": "@vercel/python"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "main.py"
-    }
-  ]
-}
-```
-
-2. Deploy to Vercel:
-```bash
-vercel --prod
-```
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `GROQ_API_KEY` | Groq API key for LLM | Yes |
+| `TAVILY_API_KEY` | Tavily API key for web search | No |
+| `CHROMA_PERSIST_DIRECTORY` | ChromaDB persistence directory | No (default: ./data/chroma_db) |
+| `HOST` | Server host | No (default: 0.0.0.0) |
+| `PORT` | Server port | No (default: 8000) |
 
 ## Project Structure
 
@@ -177,55 +124,43 @@ whatsapp-chatbot/
 │   ├── routes/              # API routes
 │   ├── services/            # Business logic
 │   └── utils/               # Utility functions
-├── data/                    # ChromaDB data storage
-├── main.py                  # Application entry point
+├── data/                    # Data storage (local only)
+├── main.py                  # Entry point
 ├── requirements.txt         # Python dependencies
-├── env.example             # Environment variables template
+├── vercel.json             # Vercel configuration
 └── README.md               # This file
 ```
-
-## Configuration
-
-### Environment Variables
-
-- `GROQ_API_KEY`: Your Groq API key
-- `TAVILY_API_KEY`: Optional Tavily API key
-- `CHROMA_PERSIST_DIRECTORY`: ChromaDB storage directory
-- `HOST`: Server host (default: 0.0.0.0)
-- `PORT`: Server port (default: 8000)
-
-### ChromaDB Settings
-
-The application uses ChromaDB for vector storage. Data is persisted in the `./data/chroma_db` directory by default.
 
 ## Troubleshooting
 
 ### Common Issues
 
-1. **ChromaDB Connection Error**
-   - Ensure the data directory exists
-   - Check file permissions
+1. **ChromaDB initialization errors**: Make sure the data directory is writable
+2. **API key errors**: Verify your Groq API key is correctly set
+3. **File upload issues**: Check file format and size limits
+4. **Memory errors on Vercel**: Consider processing files in smaller chunks
 
-2. **LLM Initialization Error**
-   - Verify your Groq API key is set correctly
-   - Check internet connectivity
+### Local Development Issues
 
-3. **File Upload Error**
-   - Ensure the file is in .txt format
-   - Check file size limits
+- If you get import errors, make sure you're in the correct directory
+- Check that all dependencies are installed: `pip install -r requirements.txt`
+- Verify your `.env` file is in the correct location
 
-### Logs
+### Vercel Deployment Issues
 
-The application logs to stdout. Check the console output for detailed error messages.
+- Check the Vercel function logs for detailed error messages
+- Verify environment variables are set correctly
+- Ensure your `vercel.json` configuration is correct
+- Check that your Python version is compatible (3.9+)
 
 ## Contributing
 
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests
+4. Add tests if applicable
 5. Submit a pull request
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the MIT License - see the LICENSE file for details.

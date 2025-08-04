@@ -21,15 +21,22 @@ class ChromaService:
         Initialize ChromaDB client
         """
         try:
-            # Create persist directory if it doesn't exist
-            os.makedirs(self.persist_directory, exist_ok=True)
+            # Check if running on Vercel (serverless environment)
+            is_vercel = os.getenv('VERCEL') == '1'
             
-            # Initialize ChromaDB client
-            self.client = chromadb.PersistentClient(
-                path=self.persist_directory
-            )
-            
-            print(f"ChromaDB client initialized with persist directory: {self.persist_directory}")
+            if is_vercel:
+                # Use in-memory client for Vercel deployment
+                self.client = chromadb.Client()
+                print("ChromaDB client initialized in-memory for Vercel deployment")
+            else:
+                # Create persist directory if it doesn't exist
+                os.makedirs(self.persist_directory, exist_ok=True)
+                
+                # Initialize ChromaDB client with persistence
+                self.client = chromadb.PersistentClient(
+                    path=self.persist_directory
+                )
+                print(f"ChromaDB client initialized with persist directory: {self.persist_directory}")
             
         except Exception as e:
             print(f"Error initializing ChromaDB client: {str(e)}")
